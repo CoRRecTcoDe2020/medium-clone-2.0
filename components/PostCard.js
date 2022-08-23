@@ -3,6 +3,9 @@ import Logo from "../static/qazi.jpg";
 import { FiBookmark } from "react-icons/fi";
 import Thumbnail from "../static/thumbnail.webp";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { getDoc, doc } from "firebase/firestore";
+import { db } from "../firebase";
 
 const styles = {
   wrapper: `flex max-w-[46rem] h-[10rem] items-center gap-[1rem] cursor-pointer`,
@@ -17,11 +20,22 @@ const styles = {
   category: `bg-[#F2F3F2] p-1 rounded-full`,
   bookMarkContainer: `cursor-pointer`,
   postDetails: `flex-[2.5] flex flex-col`,
+  thumbnailContainer: `flex-1 object-cover`,
 };
 
-const PostCard = () => {
+const PostCard = ({ post }) => {
+  const [authorData, setAuthorData] = useState(null);
+
+  useEffect(() => {
+    const getAuthorData = async () => {
+      setAuthorData((await getDoc(doc(db, "users", post.data.author))).data());
+    };
+
+    getAuthorData();
+  }, []);
+
   return (
-    <Link href={`/post/123`}>
+    <Link href={`/post/${post.id}`}>
       <div className={styles.wrapper}>
         <div className={styles.postDetails}>
           <div className={styles.authorContainer}>
@@ -34,20 +48,20 @@ const PostCard = () => {
               />
             </div>
 
-            <div className={styles.authorName}>Parsa Shaker</div>
+            <div className={styles.authorName}>{authorData?.name}</div>
           </div>
 
-          <h1 className={styles.title}>
-            7 Free Tools That Will Make You More Productive In 2022
-          </h1>
-          <div className={styles.briefing}>
-            Productivity is a skill that can be learned.
-          </div>
+          <h1 className={styles.title}>{post.data.title}</h1>
+          <div className={styles.briefing}>{post.data.brief}</div>
 
           <div className={styles.detailsContainer}>
             <span className={styles.articleDetails}>
-              August 15 • 5 min read •{" "}
-              <span className={styles.category}>productivity</span>
+              {new Date(post.data.postedOn).toLocaleString("en-UK", {
+                day: "numeric",
+                month: "short",
+              })}{" "}
+              • {post.data.postLength} min read •{" "}
+              <span className={styles.category}>{post.data.category}</span>
             </span>
             <span className={styles.bookMarkContainer}>
               <FiBookmark className="h-5 w-5" />
@@ -56,7 +70,7 @@ const PostCard = () => {
         </div>
 
         <div className={styles.thumbnailContainer}>
-          <Image src={Thumbnail} height={100} width={100} />
+          <Image src={`https://res.cloudinary.com/demo/image/fetch/${post.data.bannerImage}`} height={100} width={100} />
         </div>
       </div>
     </Link>

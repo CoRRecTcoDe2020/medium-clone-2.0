@@ -1,5 +1,5 @@
 import { MediumContext } from "../context/MediumContext";
-import { useContext } from "react"; 
+import { useContext } from "react";
 
 // Components
 import Header from "../components/Header";
@@ -16,7 +16,8 @@ const styles = {
 export default function Home() {
   const { posts } = useContext(MediumContext);
 
-  console.log(posts)
+  console.log(posts, "🔥");
+
   return (
     <div className={styles.wrapper}>
       <Header />
@@ -24,9 +25,9 @@ export default function Home() {
       <div className={styles.main}>
         <div className={styles.container}>
           <div className={styles.postsList}>
-            <PostCard />
-            <PostCard />
-            <PostCard />
+            {posts.map(post => (
+              <PostCard post={post} key={post.id} />
+            ))}
           </div>
         </div>
       </div>
