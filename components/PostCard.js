@@ -28,7 +28,11 @@ const PostCard = ({ post }) => {
 
   useEffect(() => {
     const getAuthorData = async () => {
-      setAuthorData((await getDoc(doc(db, "users", post.data.author))).data());
+      console.log((await getDoc(doc(db, "users", post.data.author))).data(), "👨‍🚒")
+
+      setAuthorData(
+        (await getDoc(doc(db, "users", post.data.author))).data()
+      );
     };
 
     getAuthorData();
@@ -41,7 +45,7 @@ const PostCard = ({ post }) => {
           <div className={styles.authorContainer}>
             <div className={styles.authorImageContainer}>
               <Image
-                src={Logo}
+                src={`https://res.cloudinary.com/demo/image/fetch/${authorData?.imageUrl}`}
                 className={styles.authorImage}
                 width={40}
                 height={40}
@@ -70,7 +74,11 @@ const PostCard = ({ post }) => {
         </div>
 
         <div className={styles.thumbnailContainer}>
-          <Image src={`https://res.cloudinary.com/demo/image/fetch/${post.data.bannerImage}`} height={100} width={100} />
+          <Image
+            src={`https://res.cloudinary.com/demo/image/fetch/${post.data.bannerImage}`}
+            height={100}
+            width={100}
+          />
         </div>
       </div>
     </Link>
