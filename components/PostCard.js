@@ -28,7 +28,7 @@ const PostCard = ({ post }) => {
 
   useEffect(() => {
     const getAuthorData = async () => {
-      console.log((await getDoc(doc(db, "users", post.data.author))).data(), "👨‍🚒")
+      // console.log((await getDoc(doc(db, "users", post.data.author))).data(), "👨‍🚒")
 
       setAuthorData(
         (await getDoc(doc(db, "users", post.data.author))).data()
